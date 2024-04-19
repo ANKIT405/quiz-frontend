@@ -1,0 +1,268 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Quiz Website</title>
+    <link rel="stylesheet" href="https://unpkg.com/aos@next/dist/aos.css" />
+    <style>
+      /* Using Data-Aos library for little bit annimation */
+      body {
+        font-family: Arial, sans-serif;
+        margin: 0;
+        padding: 0;
+        overflow: hidden;
+        background-color: #f0f0f0;
+      }
+
+      header {
+        background-color: #767575;
+        color: #fff;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+      }
+
+      main {
+        padding: 20px;
+      }
+
+      #quiz {
+        background-color: #fff;
+        padding: 20px;
+        border-radius: 10px;
+        box-shadow: 0 0 10px rgba(81, 80, 80, 0.1);
+      }
+
+      #question-box {
+        margin-bottom: 20px;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        flex-direction: column;
+        font-size: 1.3vw;
+      }
+
+      button {
+        display: block;
+        padding: 10px 20px;
+        background-color: #37b0f6;
+        color: #fff;
+        border: none;
+        border-radius: 5px;
+        cursor: pointer;
+      }
+
+      button:hover {
+        background-color: #f52121;
+      }
+
+      footer {
+        background-color: #007bff;
+        color: #fff;
+        text-align: center;
+        padding: 10px 0;
+        position: fixed;
+        bottom: 0;
+        width: 100%;
+      }
+
+      #btn-content {
+        display: flex;
+        justify-content: center;
+        align-items: center;
+      }
+      #image {
+        height: 8vw;
+      }
+      #image2 {
+        height: 5vw;
+      }
+
+      #choose-answere {
+        display: flex;
+        flex-direction: column;
+        padding-left: 1%;
+        font-size: 1.2vw;
+      }
+
+      #choose-answere > li > input {
+        height: 1.2vw;
+        width: 1.2vw;
+        margin-right: 1%;
+      }
+
+      #choose-answere > li {
+        border: 2px solid rgb(130, 128, 128);
+        padding-left: 1%;
+        border-radius: 4px;
+        margin-bottom: 2%;
+        width: 50%;
+        background: white;
+        cursor: pointer;
+      }
+
+      ::marker {
+        font-size: 1.2vw;
+      }
+
+      #score {
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        color: #767575;
+        font-size: 1.4vw;
+      }
+
+      #score {
+        font-size: 80px;
+        color: #02d94d;
+        text-align: center;
+        animation: score 1s ease-in-out infinite alternate;
+      }
+
+      @keyframes score {
+        from {
+          text-shadow: 0 0 10px #fff, 0 0 20px #fff, 0 0 30px #1df051,
+            0 0 40px #42f229, 0 0 50px #bb3dea, 0 0 60px #5ff14e,
+            0 0 70px #e60073;
+        }
+
+        to {
+          text-shadow: 0 0 30px #53f275, 0 0 20px hsl(143, 70%, 61%),
+            0 0 30px #1df051, 0 0 40px #42f229, 0 0 50px #05fa5f,
+            0 0 60px #5ff14e, 0 0 70px #e60073;
+        }
+      }
+    </style>
+  </head>
+  <body id="body">
+    <header id="header">
+      <img id="image" src="node-logo.png" />
+      <img id="image2" src="quiz-logo.png" />
+    </header>
+
+    <main id="main">
+      <section data-aos-delay="1000" data-aos="fade-down" id="quiz">
+        <div id="question-box">
+          <h2 id="question-no.">Question 1</h2>
+
+          <p id="question">Question Loading...</p>
+        </div>
+      </section>
+      <ol data-aos-delay="1000" data-aos="fade-up" id="choose-answere" type="A">
+        <li id="opt-1" onclick="input(this)">option Loading..</li>
+        <li id="opt-2" onclick="input(this)">option Loading..</li>
+
+        <li id="opt-3" onclick="input(this)">option Loading..</li>
+        <li id="opt-4" onclick="input(this)">option Loading..</li>
+      </ol>
+    </main>
+    <div id="btn-content">
+      <button
+        onclick="Question_Options()"
+        data-aos="fade-up"
+        data-aos-delay="500"
+        id="next-btn"
+      >
+        Next
+      </button>
+    </div>
+
+    <footer>
+      <p>© 2024 Quiz Website. All rights reserved.</p>
+    </footer>
+    <script src="https://unpkg.com/aos@next/dist/aos.js"></script>
+    <script>
+      AOS.init();
+
+      //-----------------------------------------------------------------------------------------
+      let n = -1;
+      let Storing_Question = [];
+      let Storing_Answere = [];
+      let store_Previous_Answere_id = "opt-1";
+      function input(value) {
+        let question = document.getElementById("question");
+
+        let option = document.getElementById(value.id);
+        option.style.backgroundColor = "white";
+        if (store_Previous_Answere_id == value.id) {
+          option.style.backgroundColor = "#24ea24";
+        } else {
+          let previous_answere = document.getElementById(
+            store_Previous_Answere_id
+          );
+          previous_answere.style.backgroundColor = "white";
+          option.style.backgroundColor = "#24ea24";
+        }
+
+        store_Previous_Answere_id = value.id;
+        Storing_Question[n] = question.innerHTML;
+        Storing_Answere[n] = option.innerHTML;
+      }
+
+      // document.getElementById("choose-answere").insertAdjacentHTML("afterbegin",`<li id="opt-5" onclick="input(this)">hello4</li>`)
+
+      //Sending Question in HTML
+      let ques_no = 0;
+      let question_no = document.getElementById("question-no.");
+      let question = document.getElementById("question");
+      let btn = document.getElementById("next-btn");
+      async function Question_Options() {
+        let option2 = document.getElementById(store_Previous_Answere_id);
+        option2.style.backgroundColor = "white";
+        let getData = await fetch(`https://quiz-app-server-3ynk.onrender.com/task?question=${ques_no}`); //URL CHANGE
+        let data = await getData.json();
+
+        if (ques_no == 9) {
+          btn.removeAttribute("onclick");
+          btn.setAttribute("onclick", "Submit()");
+          btn.innerHTML = "Submit";
+          question_no.innerHTML = `Question ${ques_no + 1}`;
+        } else {
+          question_no.innerHTML = `Question ${ques_no + 1}`;
+          data[1].map((Eachvalue, indexValue) => {
+            let option = document.getElementById(`opt-${indexValue + 1}`);
+            option.innerHTML = Eachvalue;
+          });
+        }
+        question.innerHTML = data[0];
+        console.log(ques_no); //if 10 then post call
+        ques_no++;
+        n++;
+      }
+
+      Question_Options();
+
+      function Submit() {
+        let options = {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({
+            userAnswere: Storing_Answere,
+            Question: Storing_Question,
+          }),
+        };
+        let post = fetch("https://quiz-app-server-3ynk.onrender.com/Score", options); //URL CHANGE
+        post
+          .then((response) => {
+            return response.json();
+          })
+          .then((score) => {
+            let main = document.getElementById("main");
+            let btn_content = document.getElementById("btn-content");
+            btn_content.style.display = "none";
+            main.style.display = "none";
+            let header = document.getElementById("header");
+            header.insertAdjacentHTML(
+              "afterend",
+              `<h1 id="score">Your Score:${score}/10</h1>`
+            );
+          });
+        console.log("Posted");
+
+        console.log(Storing_Answere, Storing_Question);
+      }
+    </script>
+  </body>
+</html>
